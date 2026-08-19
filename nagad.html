@@ -62,11 +62,8 @@ justify-content:center
 
 .nglogo{
 font-size:29px;
-color:#e33a24
-}
-
-.nglogo b{
-font-size:35px
+color:#e33a24;
+font-weight:800
 }
 
 .amount{
@@ -176,8 +173,9 @@ height:92px
 
 <div class="top">
 <button onclick="history.back()">‹</button>
-<button onclick="closeApp()">×</button>
+<button onclick="closePage()">×</button>
 </div>
+
 
 <div class="summary">
 
@@ -191,9 +189,11 @@ height:92px
 
 </div>
 
+
 <div class="note">
 <b>নোট:</b> টাকা পাঠানোর পর Transaction ID দিয়ে Verify করুন।
 </div>
+
 
 <div class="card">
 
@@ -207,9 +207,11 @@ placeholder="ট্রানজেকশন আইডি দিন"
 autocomplete="off"
 >
 
+
 <div class="section">
 INSTRUCTIONS
 </div>
+
 
 <div class="instruction">
 • Payment app খুলে
@@ -217,9 +219,11 @@ INSTRUCTIONS
 নির্বাচন করুন।
 </div>
 
+
 <div class="instruction">
 • প্রাপক নম্বর হিসেবে এই নম্বরটি ব্যবহার করুন:
 </div>
+
 
 <div class="row">
 
@@ -233,6 +237,7 @@ INSTRUCTIONS
 
 </div>
 
+
 <div class="instruction">
 
 • পরিমাণ:
@@ -242,6 +247,7 @@ INSTRUCTIONS
 করুন।
 
 </div>
+
 
 <div class="instruction">
 
@@ -255,19 +261,28 @@ INSTRUCTIONS
 
 </div>
 
+
 <div class="space"></div>
+
 
 <button
 class="verify"
 type="button"
 onclick="verify()">
+
 VERIFY TRANSACTION
+
 </button>
 
 </div>
 
 
 <script>
+
+
+// ========================================
+// TELEGRAM WEB APP
+// ========================================
 
 const tg =
 window.Telegram &&
@@ -278,6 +293,10 @@ tg.ready();
 tg.expand();
 }
 
+
+// ========================================
+// GET AMOUNT + ORDER ID
+// ========================================
 
 const params =
 new URLSearchParams(
@@ -290,9 +309,12 @@ params.get("amount") || "100";
 let orderId =
 params.get("order_id") || "";
 
-amount =
-Number(amount);
+amount = Number(amount);
 
+
+// ========================================
+// SHOW AMOUNT
+// ========================================
 
 document.getElementById("amount").textContent =
 amount.toFixed(2);
@@ -300,6 +322,10 @@ amount.toFixed(2);
 document.getElementById("amount2").textContent =
 amount.toFixed(2);
 
+
+// ========================================
+// COPY PAYMENT NUMBER
+// ========================================
 
 function copyNumber(){
 
@@ -310,11 +336,15 @@ document.getElementById("number")
 
 if(navigator.clipboard){
 
-navigator.clipboard
-.writeText(number)
+navigator.clipboard.writeText(number)
 .then(function(){
 
 alert("Payment number copied");
+
+})
+.catch(function(){
+
+alert("Number: " + number);
 
 });
 
@@ -327,7 +357,11 @@ alert("Number: " + number);
 }
 
 
-function closeApp(){
+// ========================================
+// CLOSE WEB APP
+// ========================================
+
+function closePage(){
 
 if(tg){
 
@@ -341,6 +375,10 @@ history.back();
 
 }
 
+
+// ========================================
+// VERIFY PAYMENT
+// ========================================
 
 function verify(){
 
@@ -372,6 +410,32 @@ return;
 }
 
 
+// ========================================
+// SAVE PAYMENT DATA
+// ========================================
+
+const paymentData = {
+
+method: "Nagad",
+
+amount: amount,
+
+order_id: orderId,
+
+transaction_id: trx
+
+};
+
+localStorage.setItem(
+"mr_pay_last_payment",
+JSON.stringify(paymentData)
+);
+
+
+// ========================================
+// CONFIRMATION SCREEN
+// ========================================
+
 document.body.innerHTML = `
 
 <div style="
@@ -393,6 +457,7 @@ padding:35px 25px;
 text-align:center;
 box-shadow:0 5px 25px #28506e25;
 ">
+
 
 <div style="
 width:80px;
@@ -433,8 +498,13 @@ line-height:1.6;
 
 <br><br>
 
-Payment verification সম্পন্ন হলে
-আপনার Deposit balance-এ যোগ হবে।
+আপনার Deposit Request এখন
+<b>Pending</b> অবস্থায় আছে।
+
+<br><br>
+
+Admin payment check করে
+আপনার balance-এ যোগ করবেন।
 
 </p>
 
@@ -442,18 +512,28 @@ Payment verification সম্পন্ন হলে
 <div style="
 background:#f3f8fb;
 border-radius:12px;
-padding:12px;
+padding:14px;
 margin-top:20px;
 color:#17658a;
 font-weight:700;
 word-break:break-all;
 ">
 
-🧾 Order ID: ${orderId}
+🧾 Order ID:
+<br>
+<code>${orderId}</code>
 
 <br><br>
 
-🔐 Transaction ID: ${trx}
+🔐 Transaction ID:
+<br>
+<code>${trx}</code>
+
+<br><br>
+
+💳 Payment Method:
+<br>
+Nagad
 
 </div>
 
@@ -464,10 +544,29 @@ color:#8999a3;
 font-size:14px;
 ">
 
-কিছুক্ষণের মধ্যে আপনাকে
-Bot Home Page-এ নেওয়া হবে...
+Bot-এ ফিরে যেতে নিচের বাটনে চাপুন।
 
 </p>
+
+
+<button
+onclick="returnToBot()"
+style="
+width:100%;
+height:58px;
+border:0;
+border-radius:15px;
+background:#e33a24;
+color:#fff;
+font-size:18px;
+font-weight:800;
+margin-top:10px;
+">
+
+🤖 RETURN TO BOT
+
+</button>
+
 
 </div>
 
@@ -475,20 +574,45 @@ Bot Home Page-এ নেওয়া হবে...
 
 `;
 
+}
 
-setTimeout(function(){
 
-const botLink =
-"https://t.me/MR_SMM_CORNER_bot?start=" +
-encodeURIComponent(
-"deposit|" +
-orderId +
-"|Nagad|" +
-trx
+// ========================================
+// RETURN TO BOT
+// ========================================
+
+function returnToBot(){
+
+const data =
+JSON.parse(
+localStorage.getItem(
+"mr_pay_last_payment"
+) || "{}"
 );
 
 
-if(tg){
+// Telegram start parameter
+
+const startParam =
+"deposit_" +
+String(data.order_id || orderId) +
+"_Nagad_" +
+String(data.transaction_id || "");
+
+
+// Complete Telegram Bot link
+
+const botLink =
+"https://t.me/MR_SMM_CORNER_bot?start=" +
+encodeURIComponent(startParam);
+
+
+// Open Bot
+
+if(
+tg &&
+typeof tg.openTelegramLink === "function"
+){
 
 tg.openTelegramLink(botLink);
 
@@ -497,8 +621,6 @@ tg.openTelegramLink(botLink);
 window.location.href = botLink;
 
 }
-
-},2000);
 
 }
 

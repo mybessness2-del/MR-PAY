@@ -177,7 +177,6 @@ height:92px
 <button onclick="history.back()">×</button>
 </div>
 
-
 <div class="summary">
 
 <div class="logo">
@@ -190,11 +189,9 @@ height:92px
 
 </div>
 
-
 <div class="note">
 <b>নোট:</b> টাকা পাঠানোর পর Transaction ID দিয়ে Verify করুন।
 </div>
-
 
 <div class="card">
 
@@ -208,11 +205,9 @@ placeholder="ট্রানজেকশন আইডি দিন"
 autocomplete="off"
 >
 
-
 <div class="section">
 INSTRUCTIONS
 </div>
-
 
 <div class="instruction">
 • Payment app খুলে
@@ -220,11 +215,9 @@ INSTRUCTIONS
 নির্বাচন করুন।
 </div>
 
-
 <div class="instruction">
 • প্রাপক নম্বর হিসেবে এই নম্বরটি ব্যবহার করুন:
 </div>
-
 
 <div class="row">
 
@@ -238,7 +231,6 @@ INSTRUCTIONS
 
 </div>
 
-
 <div class="instruction">
 
 • পরিমাণ:
@@ -248,7 +240,6 @@ INSTRUCTIONS
 করুন।
 
 </div>
-
 
 <div class="instruction">
 
@@ -262,9 +253,7 @@ INSTRUCTIONS
 
 </div>
 
-
 <div class="space"></div>
-
 
 <button
 class="verify"
@@ -278,15 +267,10 @@ VERIFY TRANSACTION
 
 <script>
 
-(function(){
-
 const params = new URLSearchParams(window.location.search);
 
-let amount = params.get("amount");
-
-if(!amount || isNaN(Number(amount))){
-amount = "100";
-}
+let amount = params.get("amount") || "100";
+let orderId = params.get("order_id") || "";
 
 amount = Number(amount);
 
@@ -297,7 +281,7 @@ document.getElementById("amount2").textContent =
 amount.toFixed(2);
 
 
-window.copyNumber = function(){
+function copyNumber(){
 
 const number =
 document.getElementById("number").textContent.trim();
@@ -316,18 +300,25 @@ alert("Number: " + number);
 
 }
 
-};
+}
 
 
-window.verify = function(){
+function verify(){
 
 const trx =
 document.getElementById("trx").value.trim();
 
-
 if(trx === ""){
 
 alert("অনুগ্রহ করে Transaction ID দিন।");
+
+return;
+
+}
+
+if(!orderId){
+
+alert("❌ Order ID পাওয়া যায়নি। আবার Deposit করুন।");
 
 return;
 
@@ -374,7 +365,6 @@ font-weight:bold;
 
 </div>
 
-
 <h2 style="
 color:#17212b;
 margin-top:22px;
@@ -383,7 +373,6 @@ margin-top:22px;
 Payment Submitted
 
 </h2>
-
 
 <p style="
 color:#667782;
@@ -400,7 +389,6 @@ Payment verification সম্পন্ন হলে
 
 </p>
 
-
 <div style="
 background:#f3f8fb;
 border-radius:12px;
@@ -411,10 +399,13 @@ font-weight:700;
 word-break:break-all;
 ">
 
-Transaction ID: ${trx}
+🧾 Order ID: ${orderId}
+
+<br><br>
+
+🔐 Transaction ID: ${trx}
 
 </div>
-
 
 <p style="
 margin-top:22px;
@@ -437,14 +428,17 @@ Bot Home Page-এ নেওয়া হবে...
 setTimeout(function(){
 
 window.location.href =
-  "https://t.me/MR_SMM_CORNER_bot?start=" +
-  encodeURIComponent("pc|bKash|" + amount + "|" + t);
+"https://t.me/MR_SMM_CORNER_bot?start=" +
+encodeURIComponent(
+"deposit|" +
+orderId +
+"|bKash|" +
+trx
+);
 
 },3000);
 
-};
-
-})();
+}
 
 </script>
 

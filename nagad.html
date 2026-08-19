@@ -23,9 +23,135 @@
 </div><div class="space"></div>
 <button class="verify" onclick="verify()">VERIFY TRANSACTION</button>
 </div>
+
 <script>
-const p=new URLSearchParams(location.search);const amount=p.get('amount')||'100';document.getElementById('amount').textContent=amount;document.getElementById('amount2').textContent=amount;
-function copyNumber(){navigator.clipboard?.writeText(document.getElementById('number').textContent).then(()=>alert('Payment number copied'))}
-function verify(){const t=document.getElementById('trx').value.trim();if(!t)return alert('অনুগ্রহ করে Transaction ID দিন।');alert('Transaction ID submitted: '+t)}
+
+const p = new URLSearchParams(location.search);
+
+const amount = p.get('amount') || '100';
+
+document.getElementById('amount').textContent = amount;
+document.getElementById('amount2').textContent = amount;
+
+
+function copyNumber(){
+
+  navigator.clipboard?.writeText(
+    document.getElementById('number').textContent
+  ).then(() => {
+
+    alert('Payment number copied');
+
+  });
+
+}
+
+
+function verify(){
+
+  const t = document.getElementById('trx').value.trim();
+
+  if(!t){
+
+    alert('অনুগ্রহ করে Transaction ID দিন।');
+
+    return;
+
+  }
+
+
+  // Confirmation Message
+  document.body.innerHTML = `
+
+    <div style="
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#eef9ff;
+      font-family:Arial,'Noto Sans Bengali',sans-serif;
+      padding:20px;
+    ">
+
+      <div style="
+        width:100%;
+        max-width:420px;
+        background:#fff;
+        border-radius:24px;
+        padding:35px 25px;
+        text-align:center;
+        box-shadow:0 5px 25px #28506e25;
+      ">
+
+        <div style="
+          width:80px;
+          height:80px;
+          margin:auto;
+          border-radius:50%;
+          background:#e33a24;
+          color:#fff;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-size:42px;
+        ">
+          ✓
+        </div>
+
+        <h2 style="
+          color:#17212b;
+          margin-top:22px;
+        ">
+          Payment Submitted
+        </h2>
+
+        <p style="
+          color:#667782;
+          font-size:16px;
+          line-height:1.6;
+        ">
+          আপনার Transaction ID সফলভাবে জমা হয়েছে।
+          <br>
+          Payment verification সম্পন্ন হলে আপনার Deposit balance-এ যোগ হবে।
+        </p>
+
+        <div style="
+          background:#f3f8fb;
+          border-radius:12px;
+          padding:12px;
+          margin-top:20px;
+          color:#17658a;
+          font-weight:700;
+        ">
+          Transaction ID: ${t}
+        </div>
+
+        <p style="
+          margin-top:22px;
+          color:#8999a3;
+          font-size:14px;
+        ">
+          কিছুক্ষণের মধ্যে আপনাকে Bot Home Page-এ নেওয়া হবে...
+        </p>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  // 3 সেকেন্ড পরে Bot Home Page
+  setTimeout(function(){
+
+    window.location.href =
+      "https://t.me/MR_SMM_CORNER_bot";
+
+  },3000);
+
+}
+
 </script>
-</body></html>
+
+</body>
+</html>

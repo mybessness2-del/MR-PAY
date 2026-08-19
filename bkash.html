@@ -269,6 +269,11 @@ VERIFY TRANSACTION
 
 <script>
 
+
+// ========================================
+// TELEGRAM WEB APP
+// ========================================
+
 const tg =
 window.Telegram &&
 window.Telegram.WebApp;
@@ -294,9 +299,12 @@ params.get("amount") || "100";
 let orderId =
 params.get("order_id") || "";
 
-
 amount = Number(amount);
 
+
+// ========================================
+// SHOW AMOUNT
+// ========================================
 
 document.getElementById("amount").textContent =
 amount.toFixed(2);
@@ -306,7 +314,7 @@ amount.toFixed(2);
 
 
 // ========================================
-// COPY NUMBER
+// COPY PAYMENT NUMBER
 // ========================================
 
 function copyNumber(){
@@ -318,11 +326,15 @@ document.getElementById("number")
 
 if(navigator.clipboard){
 
-navigator.clipboard
-.writeText(number)
+navigator.clipboard.writeText(number)
 .then(function(){
 
 alert("Payment number copied");
+
+})
+.catch(function(){
+
+alert("Number: " + number);
 
 });
 
@@ -336,7 +348,7 @@ alert("Number: " + number);
 
 
 // ========================================
-// CLOSE
+// CLOSE WEB APP
 // ========================================
 
 function closePage(){
@@ -355,7 +367,7 @@ history.back();
 
 
 // ========================================
-// VERIFY PAYMENT
+// VERIFY
 // ========================================
 
 function verify(){
@@ -389,7 +401,7 @@ return;
 
 
 // ========================================
-// CONFIRMATION PAGE
+// CONFIRMATION SCREEN
 // ========================================
 
 document.body.innerHTML = `
@@ -501,15 +513,18 @@ Bot Home Page-এ নেওয়া হবে...
 
 
 // ========================================
-// TELEGRAM DEEP LINK
+// TELEGRAM BOT LINK
 // ========================================
-
-// IMPORTANT:
-// Telegram start parameter-এ | ব্যবহার করা যাবে না.
-// তাই _ ব্যবহার করা হয়েছে.
 //
-// Format:
-// deposit_ORDERID_bKash_TRXID
+// সরাসরি আপনার Bot-এর লিংক
+//
+// https://t.me/MR_SMM_CORNER_bot
+//
+// Start parameter:
+// deposit_ORDERID_bKash_TRX
+//
+// এখানে | ব্যবহার করা হয়নি
+// ========================================
 
 const startParam =
 "deposit_" +
@@ -518,22 +533,32 @@ orderId +
 trx;
 
 
-// ========================================
-// RETURN TO BOT
-// ========================================
-
-setTimeout(function(){
+// সম্পূর্ণ Telegram Bot Link তৈরি
 
 const botLink =
 "https://t.me/MR_SMM_CORNER_bot?start=" +
 encodeURIComponent(startParam);
 
 
-if(tg && typeof tg.openTelegramLink === "function"){
+// ========================================
+// RETURN TO TELEGRAM BOT
+// ========================================
+
+setTimeout(function(){
+
+// Telegram Web App হলে
+// Telegram-এর নিজের link opener ব্যবহার করবে
+
+if(
+tg &&
+typeof tg.openTelegramLink === "function"
+){
 
 tg.openTelegramLink(botLink);
 
 }else{
+
+// Browser থেকে খুললে সরাসরি Telegram link
 
 window.location.href = botLink;
 

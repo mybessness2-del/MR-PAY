@@ -314,7 +314,7 @@ amount.toFixed(2);
 
 
 // ========================================
-// COPY PAYMENT NUMBER
+// COPY NUMBER
 // ========================================
 
 function copyNumber(){
@@ -348,7 +348,7 @@ alert("Number: " + number);
 
 
 // ========================================
-// CLOSE WEB APP
+// CLOSE
 // ========================================
 
 function closePage(){
@@ -398,6 +398,28 @@ alert(
 return;
 
 }
+
+
+// ========================================
+// SAVE DATA IN LOCAL STORAGE
+// ========================================
+
+const paymentData = {
+
+method: "bKash",
+
+amount: amount,
+
+order_id: orderId,
+
+transaction_id: trx
+
+};
+
+localStorage.setItem(
+"mr_pay_last_payment",
+JSON.stringify(paymentData)
+);
 
 
 // ========================================
@@ -465,8 +487,13 @@ line-height:1.6;
 
 <br><br>
 
-Payment verification সম্পন্ন হলে
-আপনার Deposit balance-এ যোগ হবে।
+আপনার Deposit Request এখন
+<b>Pending</b> অবস্থায় আছে।
+
+<br><br>
+
+Admin payment check করে
+আপনার balance-এ যোগ করবেন।
 
 </p>
 
@@ -491,6 +518,12 @@ word-break:break-all;
 <br>
 <code>${trx}</code>
 
+<br><br>
+
+💳 Payment Method:
+<br>
+bKash
+
 </div>
 
 
@@ -500,10 +533,28 @@ color:#8999a3;
 font-size:14px;
 ">
 
-কিছুক্ষণের মধ্যে আপনাকে
-Bot Home Page-এ নেওয়া হবে...
+Bot-এ ফিরে যেতে নিচের বাটনে চাপুন।
 
 </p>
+
+
+<button
+onclick="returnToBot()"
+style="
+width:100%;
+height:58px;
+border:0;
+border-radius:15px;
+background:#d61f72;
+color:#fff;
+font-size:18px;
+font-weight:800;
+margin-top:10px;
+">
+
+🤖 RETURN TO BOT
+
+</button>
 
 </div>
 
@@ -511,43 +562,42 @@ Bot Home Page-এ নেওয়া হবে...
 
 `;
 
+}
+
 
 // ========================================
-// TELEGRAM BOT LINK
+// RETURN TO BOT
 // ========================================
+
+function returnToBot(){
+
+const data =
+JSON.parse(
+localStorage.getItem(
+"mr_pay_last_payment"
+) || "{}"
+);
+
+
+// Telegram deep-link parameter
 //
-// সরাসরি আপনার Bot-এর লিংক
-//
-// https://t.me/MR_SMM_CORNER_bot
-//
-// Start parameter:
-// deposit_ORDERID_bKash_TRX
-//
-// এখানে | ব্যবহার করা হয়নি
-// ========================================
+// শুধুমাত্র A-Z, a-z, 0-9, _ এবং - ব্যবহার করা হয়েছে
 
 const startParam =
 "deposit_" +
-orderId +
+String(data.order_id || orderId) +
 "_bKash_" +
-trx;
+String(data.transaction_id || "");
 
 
-// সম্পূর্ণ Telegram Bot Link তৈরি
+// সম্পূর্ণ Bot link
 
 const botLink =
 "https://t.me/MR_SMM_CORNER_bot?start=" +
 encodeURIComponent(startParam);
 
 
-// ========================================
-// RETURN TO TELEGRAM BOT
-// ========================================
-
-setTimeout(function(){
-
-// Telegram Web App হলে
-// Telegram-এর নিজের link opener ব্যবহার করবে
+// Telegram-এর ভিতরে Bot খুলবে
 
 if(
 tg &&
@@ -558,13 +608,9 @@ tg.openTelegramLink(botLink);
 
 }else{
 
-// Browser থেকে খুললে সরাসরি Telegram link
-
 window.location.href = botLink;
 
 }
-
-},2000);
 
 }
 

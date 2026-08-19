@@ -1,154 +1,584 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>MR PAY - Nagad</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
-*{box-sizing:border-box}body{margin:0;background:#eef9ff;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#fff}.page{min-height:100vh;padding:18px 14px 24px}.top{height:58px;background:#fff9;border-radius:18px;display:flex;align-items:center;justify-content:space-between;padding:0 20px}.top button{border:0;background:none;color:#50616e;font-size:35px}.summary{margin-top:16px;background:#fff;border-radius:24px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px #28506e1a}.logo{width:140px;height:82px;border-radius:15px;background:#fafafa;display:flex;align-items:center;justify-content:center}.bklogo{font-size:29px;color:#c2185b}.bklogo b{font-size:35px}.nglogo{font-size:27px;color:#e33a24;font-weight:800}.amount{color:#3c4854;font-size:34px;font-weight:800}.note{margin-top:25px;text-align:center;background:#f7fae9;color:#b7a85b;border-radius:4px;padding:8px;font-size:14px}.card{margin-top:12px;background:#e33a24;border-radius:19px;padding:24px 30px 28px}.card h2{text-align:center;margin:0 0 18px;font-size:24px}.input{width:100%;height:70px;border:0;border-radius:14px;text-align:center;font-size:19px;outline:0}.section{font-size:18px;font-weight:800;margin-top:20px;padding-bottom:10px;border-bottom:1px solid #ffffff40}.instruction{font-size:17px;line-height:1.6;padding:15px 0;border-bottom:1px solid #ffffff40}.highlight{color:#ffe86b;font-weight:800}.row{display:flex;align-items:center;gap:9px;margin-top:8px}.number{font-size:23px;color:#ffe86b;font-weight:800}.copy{border:0;background:#7f1748;color:#fff;border-radius:9px;padding:10px 13px;font-weight:700}.verify{position:fixed;left:14px;right:14px;bottom:14px;height:72px;border:0;border-radius:20px;background:#e33a24;color:#fff;font-size:21px;font-weight:800}.space{height:92px}
-</style></head>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#eef9ff;
+font-family:Arial,"Noto Sans Bengali",sans-serif;
+color:#fff
+}
+
+.page{
+min-height:100vh;
+padding:18px 14px 24px
+}
+
+.top{
+height:58px;
+background:#fff9;
+border-radius:18px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px
+}
+
+.top button{
+border:0;
+background:none;
+color:#50616e;
+font-size:35px
+}
+
+.summary{
+margin-top:16px;
+background:#fff;
+border-radius:24px;
+padding:18px 22px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+box-shadow:0 3px 12px #28506e1a
+}
+
+.logo{
+width:140px;
+height:82px;
+border-radius:15px;
+background:#fafafa;
+display:flex;
+align-items:center;
+justify-content:center
+}
+
+.nglogo{
+font-size:29px;
+color:#e33a24;
+font-weight:800
+}
+
+.amount{
+color:#3c4854;
+font-size:34px;
+font-weight:800
+}
+
+.note{
+margin-top:25px;
+text-align:center;
+background:#f7fae9;
+color:#b7a85b;
+border-radius:4px;
+padding:8px;
+font-size:14px
+}
+
+.card{
+margin-top:12px;
+background:#e33a24;
+border-radius:19px;
+padding:24px 30px 28px
+}
+
+.card h2{
+text-align:center;
+margin:0 0 18px;
+font-size:24px
+}
+
+.input{
+width:100%;
+height:70px;
+border:0;
+border-radius:14px;
+text-align:center;
+font-size:19px;
+outline:0
+}
+
+.section{
+font-size:18px;
+font-weight:800;
+margin-top:20px;
+padding-bottom:10px;
+border-bottom:1px solid #ffffff40
+}
+
+.instruction{
+font-size:17px;
+line-height:1.6;
+padding:15px 0;
+border-bottom:1px solid #ffffff40
+}
+
+.highlight{
+color:#ffe86b;
+font-weight:800
+}
+
+.row{
+display:flex;
+align-items:center;
+gap:9px;
+margin-top:8px
+}
+
+.number{
+font-size:23px;
+color:#ffe86b;
+font-weight:800
+}
+
+.copy{
+border:0;
+background:#7f1748;
+color:#fff;
+border-radius:9px;
+padding:10px 13px;
+font-weight:700
+}
+
+.verify{
+position:fixed;
+left:14px;
+right:14px;
+bottom:14px;
+height:72px;
+border:0;
+border-radius:20px;
+background:#e33a24;
+color:#fff;
+font-size:21px;
+font-weight:800
+}
+
+.space{
+height:92px
+}
+</style>
+</head>
+
 <body>
+
 <div class="page">
-<div class="top"><button onclick="history.back()">‹</button><button onclick="history.back()">×</button></div>
-<div class="summary"><div class="logo"><div class="nglogo">Nagad</div></div><div class="amount"><span id="amount">100</span> BDT</div></div>
-<div class="note"><b>নোট:</b> টাকা পাঠানোর পর Transaction ID দিয়ে Verify করুন।</div>
-<div class="card">
-<h2>ট্রানজেকশন আইডি দিন</h2>
-<input id="trx" class="input" placeholder="ট্রানজেকশন আইডি দিন" autocomplete="off">
-<div class="section">INSTRUCTIONS</div>
-<div class="instruction">• Payment app খুলে <span class="highlight">Send Money</span> নির্বাচন করুন।</div>
-<div class="instruction">• প্রাপক নম্বর হিসেবে এই নম্বরটি ব্যবহার করুন:</div>
-<div class="row"><span id="number" class="number">01981021207</span><button class="copy" onclick="copyNumber()">▣ Copy</button></div>
-<div class="instruction">• পরিমাণ: <span id="amount2" class="highlight">100</span> টাকা দিয়ে <span class="highlight">SUBMIT</span> করুন।</div>
-<div class="instruction">• উপরের বক্সে আপনার <span class="highlight">Transaction ID</span> দিন এবং নিচে <span class="highlight">VERIFY</span> করুন।</div>
-</div><div class="space"></div>
-<button class="verify" onclick="verify()">VERIFY TRANSACTION</button>
+
+<div class="top">
+
+<button onclick="history.back()">‹</button>
+
+<button onclick="closeApp()">×</button>
+
 </div>
+
+
+<div class="summary">
+
+<div class="logo">
+
+<div class="nglogo">
+Nagad
+</div>
+
+</div>
+
+<div class="amount">
+
+<span id="amount">100</span> BDT
+
+</div>
+
+</div>
+
+
+<div class="note">
+
+<b>নোট:</b>
+টাকা পাঠানোর পর Transaction ID দিয়ে Verify করুন।
+
+</div>
+
+
+<div class="card">
+
+<h2>
+ট্রানজেকশন আইডি দিন
+</h2>
+
+
+<input
+id="trx"
+class="input"
+type="text"
+placeholder="ট্রানজেকশন আইডি দিন"
+autocomplete="off"
+>
+
+
+<div class="section">
+INSTRUCTIONS
+</div>
+
+
+<div class="instruction">
+
+• Payment app খুলে
+<span class="highlight">
+Send Money
+</span>
+নির্বাচন করুন।
+
+</div>
+
+
+<div class="instruction">
+
+• প্রাপক নম্বর হিসেবে এই নম্বরটি ব্যবহার করুন:
+
+</div>
+
+
+<div class="row">
+
+<span id="number" class="number">
+01981021207
+</span>
+
+<button
+class="copy"
+onclick="copyNumber()">
+▣ Copy
+</button>
+
+</div>
+
+
+<div class="instruction">
+
+• পরিমাণ:
+
+<span id="amount2" class="highlight">
+100
+</span>
+
+টাকা দিয়ে
+
+<span class="highlight">
+SUBMIT
+</span>
+
+করুন।
+
+</div>
+
+
+<div class="instruction">
+
+• উপরের বক্সে আপনার
+
+<span class="highlight">
+Transaction ID
+</span>
+
+দিন এবং নিচে
+
+<span class="highlight">
+VERIFY
+</span>
+
+করুন।
+
+</div>
+
+</div>
+
+
+<div class="space"></div>
+
+
+<button
+class="verify"
+type="button"
+onclick="verify()">
+
+VERIFY TRANSACTION
+
+</button>
+
+</div>
+
 
 <script>
 
-const p = new URLSearchParams(location.search);
-
-const amount = p.get('amount') || '100';
-
-document.getElementById('amount').textContent = amount;
-document.getElementById('amount2').textContent = amount;
+const tg =
+window.Telegram &&
+window.Telegram.WebApp;
 
 
-function copyNumber(){
+if(tg){
 
-  navigator.clipboard?.writeText(
-    document.getElementById('number').textContent
-  ).then(() => {
+tg.ready();
 
-    alert('Payment number copied');
-
-  });
+tg.expand();
 
 }
 
 
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+
+let amount =
+params.get("amount") || "100";
+
+
+let orderId =
+params.get("order_id") || "";
+
+
+amount =
+Number(amount);
+
+
+document.getElementById("amount").textContent =
+amount.toFixed(2);
+
+
+document.getElementById("amount2").textContent =
+amount.toFixed(2);
+
+
+
+function copyNumber(){
+
+const number =
+document
+.getElementById("number")
+.textContent
+.trim();
+
+
+if(navigator.clipboard){
+
+navigator.clipboard
+.writeText(number)
+.then(function(){
+
+alert("Payment number copied");
+
+});
+
+}else{
+
+alert("Number: " + number);
+
+}
+
+}
+
+
+
+function closeApp(){
+
+if(tg){
+
+tg.close();
+
+}else{
+
+history.back();
+
+}
+
+}
+
+
+
 function verify(){
 
-  const t = document.getElementById('trx').value.trim();
-
-  if(!t){
-
-    alert('অনুগ্রহ করে Transaction ID দিন।');
-
-    return;
-
-  }
+const trx =
+document
+.getElementById("trx")
+.value
+.trim();
 
 
-  // Confirmation Message
-  document.body.innerHTML = `
+if(trx === ""){
 
-    <div style="
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:#eef9ff;
-      font-family:Arial,'Noto Sans Bengali',sans-serif;
-      padding:20px;
-    ">
+alert(
+"অনুগ্রহ করে Transaction ID দিন।"
+);
 
-      <div style="
-        width:100%;
-        max-width:420px;
-        background:#fff;
-        border-radius:24px;
-        padding:35px 25px;
-        text-align:center;
-        box-shadow:0 5px 25px #28506e25;
-      ">
+return;
 
-        <div style="
-          width:80px;
-          height:80px;
-          margin:auto;
-          border-radius:50%;
-          background:#e33a24;
-          color:#fff;
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          font-size:42px;
-        ">
-          ✓
-        </div>
-
-        <h2 style="
-          color:#17212b;
-          margin-top:22px;
-        ">
-          Payment Submitted
-        </h2>
-
-        <p style="
-          color:#667782;
-          font-size:16px;
-          line-height:1.6;
-        ">
-          আপনার Transaction ID সফলভাবে জমা হয়েছে।
-          <br>
-          Payment verification সম্পন্ন হলে আপনার Deposit balance-এ যোগ হবে।
-        </p>
-
-        <div style="
-          background:#f3f8fb;
-          border-radius:12px;
-          padding:12px;
-          margin-top:20px;
-          color:#17658a;
-          font-weight:700;
-        ">
-          Transaction ID: ${t}
-        </div>
-
-        <p style="
-          margin-top:22px;
-          color:#8999a3;
-          font-size:14px;
-        ">
-          কিছুক্ষণের মধ্যে আপনাকে Bot Home Page-এ নেওয়া হবে...
-        </p>
-
-      </div>
-
-    </div>
-
-  `;
+}
 
 
-  // 3 সেকেন্ড পরে Bot Home Page
-  setTimeout(function(){
+if(!orderId){
 
-    window.location.href =
-  "https://t.me/MR_SMM_CORNER_bot?start=" +
-  encodeURIComponent("pc|Nagad|" + amount + "|" + t);
+alert(
+"❌ Order ID পাওয়া যায়নি। আবার Deposit করুন।"
+);
 
-  },3000);
+return;
+
+}
+
+
+
+document.body.innerHTML = `
+
+<div style="
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#eef9ff;
+font-family:Arial,'Noto Sans Bengali',sans-serif;
+padding:20px;
+">
+
+<div style="
+width:100%;
+max-width:420px;
+background:#fff;
+border-radius:24px;
+padding:35px 25px;
+text-align:center;
+box-shadow:0 5px 25px #28506e25;
+">
+
+<div style="
+width:80px;
+height:80px;
+margin:auto;
+border-radius:50%;
+background:#e33a24;
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:42px;
+font-weight:bold;
+">
+
+✓
+
+</div>
+
+
+<h2 style="
+color:#17212b;
+margin-top:22px;
+">
+
+Payment Submitted
+
+</h2>
+
+
+<p style="
+color:#667782;
+font-size:16px;
+line-height:1.6;
+">
+
+আপনার Transaction ID সফলভাবে জমা হয়েছে।
+
+<br><br>
+
+Payment verification সম্পন্ন হলে
+আপনার Deposit balance-এ যোগ হবে।
+
+</p>
+
+
+<div style="
+background:#f3f8fb;
+border-radius:12px;
+padding:12px;
+margin-top:20px;
+color:#17658a;
+font-weight:700;
+word-break:break-all;
+">
+
+🧾 Order ID:
+
+${orderId}
+
+<br><br>
+
+🔐 Transaction ID:
+
+${trx}
+
+</div>
+
+
+<p style="
+margin-top:22px;
+color:#8999a3;
+font-size:14px;
+">
+
+আপনাকে Bot-এ ফিরিয়ে নেওয়া হচ্ছে...
+
+</p>
+
+</div>
+
+</div>
+
+`;
+
+
+
+setTimeout(function(){
+
+
+const botLink =
+
+"https://t.me/MR_SMM_CORNER_bot?start=" +
+
+encodeURIComponent(
+
+"deposit|" +
+
+orderId +
+
+"|Nagad|" +
+
+trx
+
+);
+
+
+
+if(tg){
+
+tg.openTelegramLink(botLink);
+
+}else{
+
+window.location.href =
+botLink;
+
+}
+
+
+},2000);
 
 }
 

@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MR PAY - bKash</title>
 
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
 *{box-sizing:border-box}
 
@@ -174,7 +176,7 @@ height:92px
 
 <div class="top">
 <button onclick="history.back()">‹</button>
-<button onclick="history.back()">×</button>
+<button onclick="closeApp()">×</button>
 </div>
 
 <div class="summary">
@@ -264,8 +266,14 @@ VERIFY TRANSACTION
 
 </div>
 
-
 <script>
+
+const tg = window.Telegram && window.Telegram.WebApp;
+
+if(tg){
+  tg.ready();
+  tg.expand();
+}
 
 const params = new URLSearchParams(window.location.search);
 
@@ -297,6 +305,21 @@ alert("Payment number copied");
 }else{
 
 alert("Number: " + number);
+
+}
+
+}
+
+
+function closeApp(){
+
+if(tg){
+
+tg.close();
+
+}else{
+
+history.back();
 
 }
 
@@ -413,8 +436,7 @@ color:#8999a3;
 font-size:14px;
 ">
 
-কিছুক্ষণের মধ্যে আপনাকে
-Bot Home Page-এ নেওয়া হবে...
+আপনাকে Bot-এ ফিরিয়ে নেওয়া হচ্ছে...
 
 </p>
 
@@ -427,7 +449,7 @@ Bot Home Page-এ নেওয়া হবে...
 
 setTimeout(function(){
 
-window.location.href =
+const botLink =
 "https://t.me/MR_SMM_CORNER_bot?start=" +
 encodeURIComponent(
 "deposit|" +
@@ -436,7 +458,18 @@ orderId +
 trx
 );
 
-},3000);
+
+if(tg){
+
+tg.openTelegramLink(botLink);
+
+}else{
+
+window.location.href = botLink;
+
+}
+
+},2000);
 
 }
 

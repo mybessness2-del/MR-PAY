@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>MR PAY - Nagad</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -63,8 +62,11 @@ justify-content:center
 
 .nglogo{
 font-size:29px;
-color:#e33a24;
-font-weight:800
+color:#e33a24
+}
+
+.nglogo b{
+font-size:35px
 }
 
 .amount{
@@ -173,47 +175,29 @@ height:92px
 <div class="page">
 
 <div class="top">
-
 <button onclick="history.back()">‹</button>
-
 <button onclick="closeApp()">×</button>
-
 </div>
-
 
 <div class="summary">
 
 <div class="logo">
-
-<div class="nglogo">
-Nagad
-</div>
-
+<div class="nglogo">Nagad</div>
 </div>
 
 <div class="amount">
-
 <span id="amount">100</span> BDT
-
 </div>
 
 </div>
-
 
 <div class="note">
-
-<b>নোট:</b>
-টাকা পাঠানোর পর Transaction ID দিয়ে Verify করুন।
-
+<b>নোট:</b> টাকা পাঠানোর পর Transaction ID দিয়ে Verify করুন।
 </div>
-
 
 <div class="card">
 
-<h2>
-ট্রানজেকশন আইডি দিন
-</h2>
-
+<h2>ট্রানজেকশন আইডি দিন</h2>
 
 <input
 id="trx"
@@ -223,29 +207,19 @@ placeholder="ট্রানজেকশন আইডি দিন"
 autocomplete="off"
 >
 
-
 <div class="section">
 INSTRUCTIONS
 </div>
 
-
 <div class="instruction">
-
 • Payment app খুলে
-<span class="highlight">
-Send Money
-</span>
+<span class="highlight">Send Money</span>
 নির্বাচন করুন।
-
 </div>
-
 
 <div class="instruction">
-
 • প্রাপক নম্বর হিসেবে এই নম্বরটি ব্যবহার করুন:
-
 </div>
-
 
 <div class="row">
 
@@ -253,65 +227,41 @@ Send Money
 01981021207
 </span>
 
-<button
-class="copy"
-onclick="copyNumber()">
+<button class="copy" onclick="copyNumber()">
 ▣ Copy
 </button>
 
 </div>
 
-
 <div class="instruction">
 
 • পরিমাণ:
-
-<span id="amount2" class="highlight">
-100
-</span>
-
+<span id="amount2" class="highlight">100</span>
 টাকা দিয়ে
-
-<span class="highlight">
-SUBMIT
-</span>
-
+<span class="highlight">SUBMIT</span>
 করুন।
 
 </div>
-
 
 <div class="instruction">
 
 • উপরের বক্সে আপনার
-
-<span class="highlight">
-Transaction ID
-</span>
-
+<span class="highlight">Transaction ID</span>
 দিন এবং নিচে
-
-<span class="highlight">
-VERIFY
-</span>
-
+<span class="highlight">VERIFY</span>
 করুন।
 
 </div>
 
 </div>
 
-
 <div class="space"></div>
-
 
 <button
 class="verify"
 type="button"
 onclick="verify()">
-
 VERIFY TRANSACTION
-
 </button>
 
 </div>
@@ -323,13 +273,9 @@ const tg =
 window.Telegram &&
 window.Telegram.WebApp;
 
-
 if(tg){
-
 tg.ready();
-
 tg.expand();
-
 }
 
 
@@ -338,14 +284,11 @@ new URLSearchParams(
 window.location.search
 );
 
-
 let amount =
 params.get("amount") || "100";
 
-
 let orderId =
 params.get("order_id") || "";
-
 
 amount =
 Number(amount);
@@ -354,20 +297,16 @@ Number(amount);
 document.getElementById("amount").textContent =
 amount.toFixed(2);
 
-
 document.getElementById("amount2").textContent =
 amount.toFixed(2);
-
 
 
 function copyNumber(){
 
 const number =
-document
-.getElementById("number")
+document.getElementById("number")
 .textContent
 .trim();
-
 
 if(navigator.clipboard){
 
@@ -388,7 +327,6 @@ alert("Number: " + number);
 }
 
 
-
 function closeApp(){
 
 if(tg){
@@ -404,12 +342,10 @@ history.back();
 }
 
 
-
 function verify(){
 
 const trx =
-document
-.getElementById("trx")
+document.getElementById("trx")
 .value
 .trim();
 
@@ -434,7 +370,6 @@ alert(
 return;
 
 }
-
 
 
 document.body.innerHTML = `
@@ -514,15 +449,11 @@ font-weight:700;
 word-break:break-all;
 ">
 
-🧾 Order ID:
-
-${orderId}
+🧾 Order ID: ${orderId}
 
 <br><br>
 
-🔐 Transaction ID:
-
-${trx}
+🔐 Transaction ID: ${trx}
 
 </div>
 
@@ -533,7 +464,8 @@ color:#8999a3;
 font-size:14px;
 ">
 
-আপনাকে Bot-এ ফিরিয়ে নেওয়া হচ্ছে...
+কিছুক্ষণের মধ্যে আপনাকে
+Bot Home Page-এ নেওয়া হবে...
 
 </p>
 
@@ -544,26 +476,16 @@ font-size:14px;
 `;
 
 
-
 setTimeout(function(){
 
-
 const botLink =
-
 "https://t.me/MR_SMM_CORNER_bot?start=" +
-
 encodeURIComponent(
-
 "deposit|" +
-
 orderId +
-
 "|Nagad|" +
-
 trx
-
 );
-
 
 
 if(tg){
@@ -572,11 +494,9 @@ tg.openTelegramLink(botLink);
 
 }else{
 
-window.location.href =
-botLink;
+window.location.href = botLink;
 
 }
-
 
 },2000);
 

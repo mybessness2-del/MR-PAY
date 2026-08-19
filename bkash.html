@@ -176,7 +176,7 @@ height:92px
 
 <div class="top">
 <button onclick="history.back()">‹</button>
-<button onclick="closeApp()">×</button>
+<button onclick="closePage()">×</button>
 </div>
 
 <div class="summary">
@@ -266,21 +266,37 @@ VERIFY TRANSACTION
 
 </div>
 
+
 <script>
 
-const tg = window.Telegram && window.Telegram.WebApp;
+const tg =
+window.Telegram &&
+window.Telegram.WebApp;
 
 if(tg){
-  tg.ready();
-  tg.expand();
+tg.ready();
+tg.expand();
 }
 
-const params = new URLSearchParams(window.location.search);
 
-let amount = params.get("amount") || "100";
-let orderId = params.get("order_id") || "";
+// ========================================
+// GET AMOUNT + ORDER ID
+// ========================================
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+let amount =
+params.get("amount") || "100";
+
+let orderId =
+params.get("order_id") || "";
+
 
 amount = Number(amount);
+
 
 document.getElementById("amount").textContent =
 amount.toFixed(2);
@@ -289,14 +305,22 @@ document.getElementById("amount2").textContent =
 amount.toFixed(2);
 
 
+// ========================================
+// COPY NUMBER
+// ========================================
+
 function copyNumber(){
 
 const number =
-document.getElementById("number").textContent.trim();
+document.getElementById("number")
+.textContent
+.trim();
 
 if(navigator.clipboard){
 
-navigator.clipboard.writeText(number).then(function(){
+navigator.clipboard
+.writeText(number)
+.then(function(){
 
 alert("Payment number copied");
 
@@ -311,7 +335,11 @@ alert("Number: " + number);
 }
 
 
-function closeApp(){
+// ========================================
+// CLOSE
+// ========================================
+
+function closePage(){
 
 if(tg){
 
@@ -326,27 +354,43 @@ history.back();
 }
 
 
+// ========================================
+// VERIFY PAYMENT
+// ========================================
+
 function verify(){
 
 const trx =
-document.getElementById("trx").value.trim();
+document.getElementById("trx")
+.value
+.trim();
+
 
 if(trx === ""){
 
-alert("অনুগ্রহ করে Transaction ID দিন।");
+alert(
+"অনুগ্রহ করে Transaction ID দিন।"
+);
 
 return;
 
 }
+
 
 if(!orderId){
 
-alert("❌ Order ID পাওয়া যায়নি। আবার Deposit করুন।");
+alert(
+"❌ Order ID পাওয়া যায়নি। আবার Deposit করুন।"
+);
 
 return;
 
 }
 
+
+// ========================================
+// CONFIRMATION PAGE
+// ========================================
 
 document.body.innerHTML = `
 
@@ -388,6 +432,7 @@ font-weight:bold;
 
 </div>
 
+
 <h2 style="
 color:#17212b;
 margin-top:22px;
@@ -396,6 +441,7 @@ margin-top:22px;
 Payment Submitted
 
 </h2>
+
 
 <p style="
 color:#667782;
@@ -412,23 +458,29 @@ Payment verification সম্পন্ন হলে
 
 </p>
 
+
 <div style="
 background:#f3f8fb;
 border-radius:12px;
-padding:12px;
+padding:14px;
 margin-top:20px;
 color:#17658a;
 font-weight:700;
 word-break:break-all;
 ">
 
-🧾 Order ID: ${orderId}
+🧾 Order ID:
+<br>
+<code>${orderId}</code>
 
 <br><br>
 
-🔐 Transaction ID: ${trx}
+🔐 Transaction ID:
+<br>
+<code>${trx}</code>
 
 </div>
+
 
 <p style="
 margin-top:22px;
@@ -436,7 +488,8 @@ color:#8999a3;
 font-size:14px;
 ">
 
-আপনাকে Bot-এ ফিরিয়ে নেওয়া হচ্ছে...
+কিছুক্ষণের মধ্যে আপনাকে
+Bot Home Page-এ নেওয়া হবে...
 
 </p>
 
@@ -447,19 +500,36 @@ font-size:14px;
 `;
 
 
+// ========================================
+// TELEGRAM DEEP LINK
+// ========================================
+
+// IMPORTANT:
+// Telegram start parameter-এ | ব্যবহার করা যাবে না.
+// তাই _ ব্যবহার করা হয়েছে.
+//
+// Format:
+// deposit_ORDERID_bKash_TRXID
+
+const startParam =
+"deposit_" +
+orderId +
+"_bKash_" +
+trx;
+
+
+// ========================================
+// RETURN TO BOT
+// ========================================
+
 setTimeout(function(){
 
 const botLink =
 "https://t.me/MR_SMM_CORNER_bot?start=" +
-encodeURIComponent(
-"deposit|" +
-orderId +
-"|bKash|" +
-trx
-);
+encodeURIComponent(startParam);
 
 
-if(tg){
+if(tg && typeof tg.openTelegramLink === "function"){
 
 tg.openTelegramLink(botLink);
 

